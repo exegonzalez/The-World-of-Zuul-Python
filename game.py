@@ -1,5 +1,5 @@
-from Room import Room
-from Parser import Parser
+from room import Room
+from parser import Parser
 
 class Game:
     def __init__(self):
@@ -20,6 +20,7 @@ class Game:
         office.setExits(None, None, None, lab)
 
         self.currentRoom = outside
+        
         return
 
     def play(self):
@@ -39,13 +40,13 @@ class Game:
         print("")
         print("You are " + self.currentRoom.getDescription())
         print("Exits: ")
-        if(self.currentRoom.northExit != None):
+        if(self.currentRoom.northExit is not None):
             print("north ")
-        if(self.currentRoom.eastExit != None):
+        if(self.currentRoom.eastExit is not None):
             print("east ")
-        if(self.currentRoom.southExit != None):
+        if(self.currentRoom.southExit is not None):
             print("south ")
-        if(self.currentRoom.westExit != None):
+        if(self.currentRoom.westExit is not None):
             print("west ")
         print()
 
@@ -95,13 +96,13 @@ class Game:
             self.currentRoom = nextRoom
             print("You are " + self.currentRoom.getDescription())
             print("Exits: ")
-            if(self.currentRoom.northExit != None):
+            if(self.currentRoom.northExit is not None):
                 print("north ")
-            if(self.currentRoom.eastExit != None):
+            if(self.currentRoom.eastExit is not None):
                 print("east ")
-            if(self.currentRoom.southExit != None):
+            if(self.currentRoom.southExit is not None):
                 print("south ")
-            if(self.currentRoom.westExit != None):
+            if(self.currentRoom.westExit is not None):
                 print("west ")
             print()
 

@@ -1,4 +1,6 @@
+
 class Command:
+    
     def __init__(self, firstWord=None, secondWord=None):
         self.commandWord = firstWord
         self.secondWord = secondWord
@@ -10,7 +12,7 @@ class Command:
         return self.secondWord
     
     def isUnknown(self):
-        return (self.commandWord == None)
+        return (self.commandWord is None)
 
     def hasSecondWord(self):
-        return (self.secondWord != None)
+        return (self.secondWord is not None)

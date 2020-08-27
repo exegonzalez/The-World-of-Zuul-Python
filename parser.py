@@ -1,5 +1,5 @@
-from CommandWords import CommandWords
-from Command import Command
+from commandwords import CommandWords
+from command import Command
 
 class Parser:
     def __init__(self):
@@ -10,7 +10,7 @@ class Parser:
         word2 = None
 
         inputLine = input("> ")
-        text = inputLine.split()
+        text = inputLine.split(' ')
         if (len(text)>0):
             word1 = text[0]
             if(len(text)>1):
