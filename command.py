@@ -1,5 +1,5 @@
 
-class Command:
+class Command():
     
     def __init__(self, firstWord=None, secondWord=None):
         self.commandWord = firstWord

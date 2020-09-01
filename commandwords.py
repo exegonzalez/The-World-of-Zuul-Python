@@ -1,5 +1,5 @@
 
-class CommandWords:
+class CommandWords():
     
     def __init__(self):
         pass

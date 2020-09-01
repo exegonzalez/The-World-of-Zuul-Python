@@ -1,5 +1,5 @@
 
-class Room:
+class Room():
     def __init__(self, description):
         self.description = description
         self.northExit = None
@@ -8,13 +8,13 @@ class Room:
         self.westExit = None
 
     def setExits(self, north, east, south, west):
-        if(north != None):
+        if(north is not None):
             self.northExit = north
-        if(east != None):
+        if(east is not None):
             self.eastExit = east
-        if(south != None):
+        if(south is not None):
             self.southExit = south
-        if(west != None):
+        if(west is not None):
             self.westExit = west
         return
 

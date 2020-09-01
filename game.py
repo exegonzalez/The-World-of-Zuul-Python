@@ -1,25 +1,28 @@
 from room import Room
-from parser import Parser
+from parser_commands import Parser
 
-class Game:
+class Game():
     def __init__(self):
         self.createRooms()
         self.parser = Parser()
 
-    def createRooms(self):
+    def createRooms(self): 
+        #crear habitaciones
         outside = Room("outside the main entrance of the university")
         theater = Room("in a lecture theater")
         pub = Room("in the campus pub")
         lab = Room("in a computing lab")
         office = Room("in the computing admin office")
 
+        #inicializar salidas
         outside.setExits(None, theater, lab, pub)
         theater.setExits(None, None, None, outside)
         pub.setExits(None, outside, None, None)
         lab.setExits(outside, office, None, None)
         office.setExits(None, None, None, lab)
 
-        self.currentRoom = outside
+        #lugar de inicio
+        self.currentRoom = office
         
         return
 

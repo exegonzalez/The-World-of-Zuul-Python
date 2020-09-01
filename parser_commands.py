@@ -1,7 +1,7 @@
 from commandwords import CommandWords
 from command import Command
 
-class Parser:
+class Parser():
     def __init__(self):
         self.commands = CommandWords()
 
