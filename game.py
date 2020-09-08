@@ -8,21 +8,38 @@ class Game():
 
     def createRooms(self): 
         #crear habitaciones
-        outside = Room("outside the main entrance of the university")
-        theater = Room("in a lecture theater")
-        pub = Room("in the campus pub")
-        lab = Room("in a computing lab")
-        office = Room("in the computing admin office")
+        entrance = Room("in the entrance bridge of Millenium Falcon")
+        cockpit = Room("in the cockpit")
+        side_hall = Room("in the side hall")
+        circle_path = Room('in the central path of the ship')
+        bathroom = Room("in the bathroom")
 
-        #inicializar salidas
-        outside.setExits(None, theater, lab, pub)
-        theater.setExits(None, None, None, outside)
-        pub.setExits(None, outside, None, None)
-        lab.setExits(outside, office, None, None)
-        office.setExits(None, None, None, lab)
+        gunner_station = Room("in the gunner station")
+        engine_room = Room("in the engine room")
+
+        primary_room = Room("in the primary room of the ship")
+        secondary_room = Room("in the primary room of the ship")
+
+        conference_room = Room("in the conference room")
+
+        #inicializar salidas north, east, south, west
+        cockpit.setExits(None, None, circle_path, None)
+        circle_path.setExits(cockpit, bathroom, entrance, side_hall)
+        side_hall.setExits(primary_room, side_hall, secondary_room, entrance)
+        entrance.setExits(circle_path, side_hall, None, None)
+        bathroom.setExits(None, None, None, circle_path)
+
+        engine_room.setExits(None, None, None, None)
+        gunner_station.setExits(None, None, None, None)
+       
+        primary_room.setExits(None, None, side_hall, None)
+        secondary_room.setExits(side_hall, None, None, None)
+
+        conference_room.setExits(None, None, None, None)
+        
 
         #lugar de inicio
-        self.currentRoom = office
+        self.currentRoom = gunner_station
         
         return
 
@@ -37,8 +54,8 @@ class Game():
 
     def printWelcome(self):
         print()
-        print("Welcome to the World of Zuul!")
-        print("World of Zuul is a new, incredibly boring adventure game.")
+        print("Welcome to the Explore Millennium Falcon - A Star Wars Game!")
+        print("Explore Millennium Falcon is a new, incredibly adventure game.")
         print("Type 'help' if you need help.")
         print("")
         print("You are " + self.currentRoom.getDescription())
@@ -72,7 +89,7 @@ class Game():
 
     def printHelp(self):
         print("You are lost. You are alone. You wander")
-        print("around at the university.")
+        print("around at the millennium falcon.")
         print()
         print("Your command words are:")
         print("   go quit help")
