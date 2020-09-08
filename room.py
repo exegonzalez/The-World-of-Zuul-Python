@@ -1,22 +1,42 @@
 
 class Room():
-    def __init__(self, description):
-        self.description = description
-        self.northExit = None
-        self.southExit = None
-        self.eastExit = None
-        self.westExit = None
 
-    def setExits(self, north, east, south, west):
+    def __init__(self, description):
+        self.__description = description
+        self.__exits = {}
+
+    def setExits(self, north, east, south, west, up, down):
         if(north is not None):
-            self.northExit = north
+            self.__exits['north'] = north
         if(east is not None):
-            self.eastExit = east
+            self.__exits['east'] = east
         if(south is not None):
-            self.southExit = south
+            self.__exits['south'] = south
         if(west is not None):
-            self.westExit = west
-        return
+            self.__exits['west'] = west
+        if(up is not None):
+            self.__exits['up'] = up
+        if(down is not None):
+            self.__exits['down'] = down
+
+    def setExit(self, direccion, room):
+        self.__exits[direccion] = room
 
     def getDescription(self):
-        return self.description
+        return self.__description
+    
+    def printLocationInfo(self):
+        print("You are stand ", self.getDescription())
+        print("Exits: ", self.getExitsString())
+        print()
+
+    def getExit(self, direction):
+        if(direction in self.__exits):
+            return self.__exits[direction]
+        else:
+            return None
+
+    def getExitsString(self):
+        exits = ' | '
+        exits = exits.join(self.__exits.keys())
+        return exits

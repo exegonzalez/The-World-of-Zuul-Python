@@ -7,7 +7,7 @@ class Game():
         self.parser = Parser()
 
     def createRooms(self): 
-        #crear habitaciones
+        #* crear habitaciones
         entrance = Room("in the entrance bridge of Millenium Falcon")
         cockpit = Room("in the cockpit")
         side_hall = Room("in the side hall")
@@ -22,24 +22,29 @@ class Game():
 
         conference_room = Room("in the conference room")
 
-        #inicializar salidas north, east, south, west
-        cockpit.setExits(None, None, circle_path, None)
-        circle_path.setExits(cockpit, bathroom, entrance, side_hall)
-        side_hall.setExits(primary_room, side_hall, secondary_room, entrance)
-        entrance.setExits(circle_path, side_hall, None, None)
-        bathroom.setExits(None, None, None, circle_path)
+        #* inicializar salidas north, east, south, west
+        #cockpit.setExits(None, None, circle_path, None, None, None)
+        cockpit.setExit('south', circle_path)
+        circle_path.setExits(cockpit, bathroom, entrance, side_hall, gunner_station, engine_room)
+        side_hall.setExits(primary_room, side_hall, secondary_room, entrance, None, conference_room)
+        #entrance.setExits(circle_path, side_hall, None, None, None, None)
+        entrance.setExit('north', circle_path)
+        entrance.setExit('east', side_hall)
 
-        engine_room.setExits(None, None, None, None)
-        gunner_station.setExits(None, None, None, None)
+        #bathroom.setExits(None, None, None, circle_path, None, None)
+        bathroom.setExit('west', circle_path)
+
+        engine_room.setExits(None, None, None, None, circle_path, None)
+        gunner_station.setExits(None, None, None, None, None, circle_path)
        
-        primary_room.setExits(None, None, side_hall, None)
-        secondary_room.setExits(side_hall, None, None, None)
+        primary_room.setExits(None, None, side_hall, None, None, None)
+        secondary_room.setExits(side_hall, None, None, None, None, None)
 
-        conference_room.setExits(None, None, None, None)
-        
+        conference_room.setExits(None, None, None, None, side_hall, None)
 
-        #lugar de inicio
-        self.currentRoom = gunner_station
+
+        #! lugar de inicio norte
+        self.currentRoom = entrance
         
         return
 
@@ -58,17 +63,7 @@ class Game():
         print("Explore Millennium Falcon is a new, incredibly adventure game.")
         print("Type 'help' if you need help.")
         print("")
-        print("You are " + self.currentRoom.getDescription())
-        print("Exits: ")
-        if(self.currentRoom.northExit is not None):
-            print("north ")
-        if(self.currentRoom.eastExit is not None):
-            print("east ")
-        if(self.currentRoom.southExit is not None):
-            print("south ")
-        if(self.currentRoom.westExit is not None):
-            print("west ")
-        print()
+        self.currentRoom.printLocationInfo()
 
     def processCommand(self,command):
         wantToQuit = False
@@ -100,31 +95,12 @@ class Game():
             return
         
         direction = command.getSecondWord()
-        nextRoom = None
-        if(direction == "north"):
-            nextRoom = self.currentRoom.northExit
-        if(direction == "east"):
-            nextRoom = self.currentRoom.eastExit
-        if(direction == "south"):
-            nextRoom = self.currentRoom.southExit
-        if(direction == "west"):
-            nextRoom = self.currentRoom.westExit
-        
+        nextRoom = self.currentRoom.getExit(direction)
         if(nextRoom == None):
             print("There is no door!")
         else:
             self.currentRoom = nextRoom
-            print("You are " + self.currentRoom.getDescription())
-            print("Exits: ")
-            if(self.currentRoom.northExit is not None):
-                print("north ")
-            if(self.currentRoom.eastExit is not None):
-                print("east ")
-            if(self.currentRoom.southExit is not None):
-                print("south ")
-            if(self.currentRoom.westExit is not None):
-                print("west ")
-            print()
+            self.currentRoom.printLocationInfo()
 
     def quit(self, command):
         if(command.hasSecondWord()):
@@ -133,5 +109,5 @@ class Game():
         else:
             return True
 
-g = Game()
-g.play()
+game = Game()
+game.play()
