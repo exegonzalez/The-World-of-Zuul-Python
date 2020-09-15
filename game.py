@@ -1,5 +1,6 @@
 from room import Room
 from parser_commands import Parser
+from item import Item
 
 class Game():
     def __init__(self):
@@ -40,13 +41,21 @@ class Game():
         primary_room.setExits(None, None, side_hall, None, None, None)
         secondary_room.setExits(side_hall, None, None, None, None, None)
 
-        conference_room.setExits(None, None, None, None, side_hall, None)
+        #conference_room.setExits(None, None, None, None, side_hall, None)
+        conference_room.setExit(side_hall, 'up')
 
+        # carga de items y cargarlas en el su room
+        ligthsaber = Item('lightsaber', 'this is a ligthsaber', 1)
+        blaster = Item('blaster', 'a stormtrooper blaster', 2.5)
+        book = Item('book','an old book', 0.5)
+
+        cockpit.addItem(blaster) 
+        conference_room.addItem(book)
+        engine_room.addItem(ligthsaber)
 
         #! lugar de inicio norte
-        self.currentRoom = entrance
+        self.currentRoom = cockpit
         
-        return
 
     def play(self):
         self.printWelcome()
@@ -79,6 +88,10 @@ class Game():
             self.goRoom(command)
         elif(commandWord == "quit"):
             wantToQuit = self.quit(command)
+        elif(commandWord == 'look'):
+            self.look()
+        elif(commandWord == 'eat'):
+            self.eat()
 
         return wantToQuit
 
@@ -87,7 +100,8 @@ class Game():
         print("around at the millennium falcon.")
         print()
         print("Your command words are:")
-        print("   go quit help")
+        #print("   go quit help")
+        print(self.parser.show_commands())
 
     def goRoom(self,command):
         if(not command.hasSecondWord()):
@@ -101,6 +115,13 @@ class Game():
         else:
             self.currentRoom = nextRoom
             self.currentRoom.printLocationInfo()
+    
+    def look(self):
+        self.currentRoom.printLocationInfo()
+
+    def eat(self):
+        print("You have eaten now and you are not hungry anymore.")
+
 
     def quit(self, command):
         if(command.hasSecondWord()):

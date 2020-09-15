@@ -21,3 +21,5 @@ class Parser():
         else:
             return Command(None, word2)
 
+    def show_commands(self):
+        return self.commands.show_all()

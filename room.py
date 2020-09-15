@@ -4,6 +4,7 @@ class Room():
     def __init__(self, description):
         self.__description = description
         self.__exits = {}
+        self.__item = None # muchos items
 
     def setExits(self, north, east, south, west, up, down):
         if(north is not None):
@@ -27,7 +28,8 @@ class Room():
     
     def printLocationInfo(self):
         print("You are stand ", self.getDescription())
-        print("Exits: ", self.getExitsString())
+        print("Exits:", self.getExitsString())
+        print("Items", self.getItems())
         print()
 
     def getExit(self, direction):
@@ -40,3 +42,14 @@ class Room():
         exits = ' | '
         exits = exits.join(self.__exits.keys())
         return exits
+    
+    #! pensar para muchos items
+    def getItems(self):
+        items = ''
+        if(self.__item is not None):
+            items += self.__item.descritpion
+        return items
+
+    #! pensar para muchos items
+    def addItem(self, item):
+        self.__item = item
