@@ -1,11 +1,15 @@
 from room import Room
 from parser_commands import Parser
 from item import Item
+from stack import Stack
+from player import Player
 
 class Game():
     def __init__(self):
         self.createRooms()
         self.parser = Parser()
+        self.previousRoom = Stack()
+        self.player = Player()
 
     def createRooms(self): 
         #* crear habitaciones
@@ -42,19 +46,22 @@ class Game():
         secondary_room.setExits(side_hall, None, None, None, None, None)
 
         #conference_room.setExits(None, None, None, None, side_hall, None)
-        conference_room.setExit(side_hall, 'up')
+        conference_room.setExit('up', side_hall)
 
         # carga de items y cargarlas en el su room
         ligthsaber = Item('lightsaber', 'this is a ligthsaber', 1)
         blaster = Item('blaster', 'a stormtrooper blaster', 2.5)
         book = Item('book','an old book', 0.5)
+        table = Item('table', 'a table of metal', 25)
+        blaster = Item('blaster', 'a stormtrooper blaster', 2.5)
 
         cockpit.addItem(blaster) 
         conference_room.addItem(book)
+        conference_room.addItem(table)
         engine_room.addItem(ligthsaber)
 
         #! lugar de inicio norte
-        self.currentRoom = cockpit
+        self.currentRoom = entrance
         
 
     def play(self):
@@ -92,6 +99,13 @@ class Game():
             self.look()
         elif(commandWord == 'eat'):
             self.eat()
+        elif(commandWord == 'back'):
+            self.goBack()
+        elif(commandWord == 'take'):
+            self.takeItem(command)
+        elif(commandWord == 'drop'):
+            pass
+
 
         return wantToQuit
 
@@ -113,6 +127,7 @@ class Game():
         if(nextRoom == None):
             print("There is no door!")
         else:
+            self.previousRoom.push(self.currentRoom)
             self.currentRoom = nextRoom
             self.currentRoom.printLocationInfo()
     
@@ -121,6 +136,26 @@ class Game():
 
     def eat(self):
         print("You have eaten now and you are not hungry anymore.")
+
+    def goBack(self):
+        print('go back to the previous room..')
+        if(not self.previousRoom.isEmpty()):
+            self.currentRoom = self.previousRoom.pop()
+            self.currentRoom.printLocationInfo()
+        else:
+            print("don't go back, you are in the initial position...")
+
+    def takeItem(self, command):
+        if(not command.hasSecondWord()):
+            print("Take what?")
+            return
+        
+        item_name = command.getSecondWord()
+        item = self.currentRoom.quitItem(item_name)
+        if(item is not None):
+            self.player.setItem(item)
+        else:
+            print(item_name, 'not exists in the current room')
 
 
     def quit(self, command):

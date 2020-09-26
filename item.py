@@ -7,5 +7,8 @@ class Item():
         self.__descritpion = descritpion
         self.__weight = weight
 
+    def getName(self):
+        return self.__nombre
+
     def itemInfo(self):
-        return 'info item'
+        return self.__nombre+ ': '+ self.__descritpion

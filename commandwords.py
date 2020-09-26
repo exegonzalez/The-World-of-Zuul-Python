@@ -4,7 +4,7 @@ class CommandWords():
     def __init__(self):
         pass
 
-    __VALID_COMMANDS = ["go", "look", "quit", 'eat', "help"]
+    __VALID_COMMANDS = ["go", "look", "quit", 'eat', "back", "take", "drop", "help"]
 
     def isCommand(self, aString):
         return aString in self.__VALID_COMMANDS
