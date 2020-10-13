@@ -49,19 +49,24 @@ class Game():
         conference_room.setExit('up', side_hall)
 
         # carga de items y cargarlas en el su room
-        ligthsaber = Item('lightsaber', 'this is a ligthsaber', 1)
-        blaster = Item('blaster', 'a stormtrooper blaster', 2.5)
-        book = Item('book','an old book', 0.5)
-        table = Item('table', 'a table of metal', 25)
-        blaster = Item('blaster', 'a stormtrooper blaster', 2.5)
+        ligthsaber = Item('lightsaber', 'this is a ligthsaber', 1, True)
+        blaster = Item('blaster', 'a stormtrooper blaster', 2.5, True)
+        casco = Item('helmet', 'a stormtrooper helmet', 5, True)
+        book = Item('book','an old book', 0.5, True)
+        table = Item('table', 'a table of metal', 25, False)
+        cookie = Item('cookie', 'a magic cookie', 0.1, True, True, 5)
+        #blaster = Item('blaster', 'a stormtrooper blaster', 2.5, True)
 
         cockpit.addItem(blaster) 
+        cockpit.addItem(casco) 
+        cockpit.addItem(table)
+        cockpit.addItem(cookie)
         conference_room.addItem(book)
-        conference_room.addItem(table)
+        #conference_room.addItem(table)
         engine_room.addItem(ligthsaber)
 
         #! lugar de inicio norte
-        self.currentRoom = entrance
+        self.currentRoom = cockpit
         
 
     def play(self):
@@ -97,14 +102,16 @@ class Game():
             wantToQuit = self.quit(command)
         elif(commandWord == 'look'):
             self.look()
+        elif(commandWord == 'inventory'):
+            self.showInventory()
         elif(commandWord == 'eat'):
-            self.eat()
+            self.eat(command)
         elif(commandWord == 'back'):
             self.goBack()
         elif(commandWord == 'take'):
             self.takeItem(command)
         elif(commandWord == 'drop'):
-            pass
+            self.dropItem(command)
 
 
         return wantToQuit
@@ -130,13 +137,30 @@ class Game():
             self.previousRoom.push(self.currentRoom)
             self.currentRoom = nextRoom
             self.currentRoom.printLocationInfo()
+            self.player.setCurrentRoom(self.currentRoom)
     
     def look(self):
         self.currentRoom.printLocationInfo()
+    
+    def showInventory(self):
+        print('Items in inventory:', self.player.getItems())
+        print('Player current weight:', self.player.weightItems())
 
-    def eat(self):
-        print("You have eaten now and you are not hungry anymore.")
+    def eat(self, command):
+        if(not command.hasSecondWord()):
+            print("Take what?")
+            return
 
+        item_name = command.getSecondWord()
+        
+        if(self.player.hasItem(item_name)):
+            item = self.player.quitItem(item_name)
+            if(item.isComestible()):
+                print('comer')
+                #! que items es?
+            else:
+                print('no comestible....')
+        
     def goBack(self):
         print('go back to the previous room..')
         if(not self.previousRoom.isEmpty()):
@@ -153,10 +177,31 @@ class Game():
         item_name = command.getSecondWord()
         item = self.currentRoom.quitItem(item_name)
         if(item is not None):
-            self.player.setItem(item)
+            if(item.isPickeable()):
+                if(self.player.canTake(item)):
+                    self.player.setItem(item)
+                    print('you took the', item.getName())
+                else:
+                    print('you no have enough strong..')
+                    self.currentRoom.addItem(item)
+            else:
+                self.currentRoom.addItem(item)
+                print("the item can't be taked")
         else:
             print(item_name, 'not exists in the current room')
 
+    def dropItem(self, command):
+        if(not command.hasSecondWord()):
+            print("Take what?")
+            return
+        
+        item_name = command.getSecondWord()
+        item = self.player.quitItem(item_name)
+        if(item is not None):
+            self.currentRoom.addItem(item)
+            print('you dropping the', item.getName())
+        else:
+            print(item_name, 'not exists in your inventory')
 
     def quit(self, command):
         if(command.hasSecondWord()):
