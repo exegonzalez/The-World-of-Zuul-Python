@@ -10,6 +10,12 @@ class Player():
     #! modificar para muchos y control de peso
     def setItem(self, item):
         self.__items[item.getName()] = item
+
+    def getItem(self, item_name):
+        return self.__items[item_name]
+
+    def incrementMaxWeigth(self, increment):
+        self.__max_weight += increment
     
     def quitItem(self, item_name):
         if(item_name in self.__items):

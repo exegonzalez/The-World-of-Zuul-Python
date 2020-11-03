@@ -25,6 +25,9 @@ class Room():
 
     def getDescription(self):
         return self.__description
+
+    def getItem(self, item_name):
+        return self.__items[item_name]
     
     def printLocationInfo(self):
         print("You are stand ", self.getDescription())
@@ -43,6 +46,9 @@ class Room():
         exits = exits.join(self.__exits.keys())
         return exits
     
+    def hasItem(self, item_name):
+        return item_name in self.__items
+
     #! pensar para muchos items
     def getItems(self):
         items = '|'

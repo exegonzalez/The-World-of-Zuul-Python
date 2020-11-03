@@ -1,6 +1,6 @@
 from room import Room
 from parser_commands import Parser
-from item import Item
+from item import Item, Comestible
 from stack import Stack
 from player import Player
 
@@ -54,7 +54,7 @@ class Game():
         casco = Item('helmet', 'a stormtrooper helmet', 5, True)
         book = Item('book','an old book', 0.5, True)
         table = Item('table', 'a table of metal', 25, False)
-        cookie = Item('cookie', 'a magic cookie', 0.1, True, True, 5)
+        cookie = Comestible('cookie', 'a magic cookie', 0.1, True, 5)
         #blaster = Item('blaster', 'a stormtrooper blaster', 2.5, True)
 
         cockpit.addItem(blaster) 
@@ -112,7 +112,8 @@ class Game():
             self.takeItem(command)
         elif(commandWord == 'drop'):
             self.dropItem(command)
-
+        elif(commandWord == 'inspect'):
+            self.inspect(command)
 
         return wantToQuit
 
@@ -146,6 +147,19 @@ class Game():
         print('Items in inventory:', self.player.getItems())
         print('Player current weight:', self.player.weightItems())
 
+    def inspect(self, command):
+        if(not command.hasSecondWord()):
+            print("Take what?")
+            return
+
+        item_name = command.getSecondWord()
+        
+        if(self.currentRoom.hasItem(item_name)):
+            item = self.currentRoom.getItem(item_name)
+            item.inspectItem()
+        else:
+            print('no existe ese item en la habitacion')
+
     def eat(self, command):
         if(not command.hasSecondWord()):
             print("Take what?")
@@ -155,11 +169,11 @@ class Game():
         
         if(self.player.hasItem(item_name)):
             item = self.player.quitItem(item_name)
-            if(item.isComestible()):
-                print('comer')
-                #! que items es?
+            if(isinstance(item, Comestible)):
+                item.eat(self.player)
             else:
-                print('no comestible....')
+                self.player.setItem(item)
+                print('el item no comestible....')
         
     def goBack(self):
         print('go back to the previous room..')
